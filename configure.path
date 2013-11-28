@@ -1,0 +1,24 @@
+#!/bin/bash
+# This file is meant to be sourced not executed
+
+BUILD_ROOT=${BUILD_ROOT:-${PWD}/build}
+echo "BUILD_ROOT=${BUILD_ROOT}"
+
+# echo "Hello"
+BFIN_ELF=${BUILD_ROOT}/bfin-elf/bin
+BFIN_UCLINUX=${BUILD_ROOT}/bfin-uclinux/bin
+BFIN_LINUX_UCLIBC=${BUILD_ROOT}/bfin-linux-uclibc/bin
+
+if [[ "$PATH" != *"$BFIN_LINUX_UCLIBC:"* ]]; then
+  export PATH=${BFIN_LINUX_UCLIBC}:${PATH}
+fi
+if [[ "$PATH" != *"$BFIN_UCLINUX:"* ]]; then
+  export PATH=${BFIN_UCLINUX}:${PATH}
+fi
+if [[ "$PATH" != *"$BFIN_ELF:"* ]]; then
+  export PATH=${BFIN_ELF}:${PATH}
+fi
+echo "PATH=${PATH}"
+bfin-elf-gcc --version
+bfin-uclinux-gcc --version
+bfin-linux-uclibc-gcc --version
