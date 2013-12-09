@@ -11,7 +11,6 @@
 ### Appending the supplied value to the existing value
 ### 
 ROOT_DIR?=${PWD}
-PATCHES_DIR=${ROOT_DIR}/patches
 SOURCES_DIR=${ROOT_DIR}/sources
 TOOLCHAIN_DIR=${SOURCES_DIR}/toolchain
 UBOOT_DIR=${SOURCES_DIR}/u-boot
@@ -25,7 +24,7 @@ BUILDROOT_BUILDDIR?=${BUILD_DIR}/buildroot
 all: toolchain u-boot buildroot
 	@echo ${BuildToolChain}
 
-toolchain: toolchain_patches
+toolchain:
 	${BuildToolChain} -p
 	mkdir -p ${BUILD_DIR}
 	${BuildToolChain} \
@@ -34,13 +33,6 @@ toolchain: toolchain_patches
 		-s ${TOOLCHAIN_DIR} \
 		-u ${UBOOT_DIR} \
 		-j 1
-
-
-toolchain_patches: .patch.BuildToolChain.applied
-
-.patch.BuildToolChain.applied:
-	patch --directory ${TOOLCHAIN_DIR} ${BuildToolChain} ${PATCHES_DIR}/BuildToolChain.patch -t
-	touch $@
 
 u-boot:
 ifneq ($(BOARD),)
@@ -66,7 +58,6 @@ endif
 
 print_env:
 	@echo ROOT_DIR=${ROOT_DIR}
-	@echo PATCHES_DIR=${PATCHES_DIR}
 	@echo SOURCES_DIR=${SOURCES_DIR}
 	@echo TOOLCHAIN_DIR=${TOOLCHAIN_DIR}
 	@echo UBOOT_DIR=${UBOOT_DIR}

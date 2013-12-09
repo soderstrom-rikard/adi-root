@@ -1,9 +1,9 @@
 [submodule "sources/toolchain"]
 	path = sources/toolchain
-	url = git://git.code.sf.net/p/adi-toolchain/blackfin
+	url = https://github.com/soderstrom-rikard/adi-toolchain
 [submodule "sources/u-boot"]
 	path = sources/u-boot
-	url = git://git.code.sf.net/p/adi-u-boot/code
+	url = https://github.com/soderstrom-rikard/adi-u-boot
 [submodule "sources/buildroot"]
 	path = sources/buildroot
-	url = git://git.code.sf.net/p/adi-buildroot/code
+	url = https://github.com/soderstrom-rikard/adi-buildroot
