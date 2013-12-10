@@ -38,7 +38,6 @@ u-boot:
 ifneq ($(BOARD),)
 	@mkdir -p $(UBOOT_BUILDDIR)
 	@cd ${UBOOT_DIR} && \
-		make O=${UBOOT_BUILDDIR} distclean && \
 		make O=${UBOOT_BUILDDIR} $(BOARD)_config && \
 		make O=${UBOOT_BUILDDIR} all
 else
@@ -49,11 +48,21 @@ buildroot:
 ifneq ($(BOARD),)
 	@mkdir -p $(BUILDROOT_BUILDDIR)
 	@cd ${BUILDROOT_DIR} && \
-		make O=${BUILDROOT_BUILDDIR} distclean && \
 		make O=${BUILDROOT_BUILDDIR} $(BOARD)_defconfig && \
 		make O=${BUILDROOT_BUILDDIR} all
 else
 	@echo "Please use syntax \"make BOARD=<board> buildroot\""
+endif
+
+distclean:
+ifeq ($(TARGET),"buildroot")
+	cd ${BUILDROOT_DIR} && \
+		make O=${BUILDROOT_BUILDDIR} distclean && \
+else ifeq ($(TARGET),"u-boot")
+	cd ${UBOOT_DIR} && \
+		make O=${UBOOT_BUILDDIR} distclean && \
+else
+	@echo "Please use syntax \"make TARGET=buildroot|u-boot distclean\""
 endif
 
 print_env:
