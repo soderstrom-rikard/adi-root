@@ -20,6 +20,7 @@ BuildToolChain=${TOOLCHAIN_DIR}/buildscript/BuildToolChain
 BUILD_DIR?=${ROOT_DIR}/build
 UBOOT_BUILDDIR?=${BUILD_DIR}/u-boot
 BUILDROOT_BUILDDIR?=${BUILD_DIR}/buildroot
+KERNEL_BUILDDIR?=$(BUILDROOT_BUILDDIR)/build/linux-custom
 
 all: toolchain u-boot buildroot
 	@echo ${BuildToolChain}
@@ -55,14 +56,25 @@ else
 endif
 
 distclean:
-ifeq ($(TARGET),"buildroot")
+ifeq ($(TARGET),buildroot)
 	cd ${BUILDROOT_DIR} && \
-		make O=${BUILDROOT_BUILDDIR} distclean && \
-else ifeq ($(TARGET),"u-boot")
+		make O=${BUILDROOT_BUILDDIR} distclean
+else ifeq ($(TARGET),u-boot)
 	cd ${UBOOT_DIR} && \
-		make O=${UBOOT_BUILDDIR} distclean && \
+		make O=${UBOOT_BUILDDIR} distclean
 else
 	@echo "Please use syntax \"make TARGET=buildroot|u-boot distclean\""
+endif
+
+menuconfig:
+ifeq ($(TARGET),buildroot)
+	cd $(BUILDROOT_DIR) && \
+		make O=$(BUILDROOT_BUILDDIR) menuconfig 
+else ifeq ($(TARGET),kernel)
+	cd $(KERNEL_DIR) && \
+		make O=$(KERNEL_BUILDDIR) menuconfig
+else
+	@echo "Please use syntax \"make TARGET=kernel menuconfig\""
 endif
 
 print_env:
@@ -76,4 +88,5 @@ print_env:
 	@echo BUILD_DIR=${BUILD_DIR}
 	@echo UBOOT_BUILDDIR=${UBOOT_BUILDDIR}
 	@echo BUILDROOT_BUILDDIR=${BUILDROOT_BUILDDIR}
+	@echo KERNEL_BUILDDIR=${KERNEL_BUILDDIR}
 
